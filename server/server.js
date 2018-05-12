@@ -11,6 +11,12 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
+app.post('/testing', (req, res) => {
+    res.send({
+        test:'Working well.'
+    });
+});
+
 app.post('/todos', (req,res) => {
     let todo =  new Todo({
         text: req.body.text

@@ -17,6 +17,7 @@ app.post('/testing', (req, res) => {
     });
 });
 
+// Route for adding todo into the database 
 app.post('/todos', (req,res) => {
     let todo =  new Todo({
         text: req.body.text
@@ -29,6 +30,7 @@ app.post('/todos', (req,res) => {
     });
 }); 
 
+// Route for getting all the todo from the database
 app.get('/todos', (req, res) => {
     Todo.find().then((todos) => {
         res.send({todos});
@@ -37,6 +39,7 @@ app.get('/todos', (req, res) => {
     }) 
 });
 
+// Route for getting the todo from the database by id
 app.get('/todos/:id', (req,res) => {
     let id = req.params.id;
 
@@ -51,9 +54,28 @@ app.get('/todos/:id', (req,res) => {
         }
 
         res.send({todo});
-    }, (e) => {
+    }).catch((e) => {
         res.status(400).send(e);
-    });
+    }); 
+});
+
+// Route for deleting todo from the database
+app.delete('/todos/:id', (req,res) => {
+    let id = res.params.id;
+
+    if(!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if(!todo) {
+            return res.status(404).send();
+        }
+
+        res.send(todo);
+    }).catch((e) => {
+        res.status(400).send(e);
+    }); 
 });
 
 
@@ -64,3 +86,7 @@ app.listen(port, () => {
 module.exports = {
     app
 };
+
+/*
+Applying git stash example
+*/
